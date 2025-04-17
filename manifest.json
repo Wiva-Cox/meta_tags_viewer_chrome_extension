@@ -1,7 +1,7 @@
 {
   "name": "Meta Tags Viewer",
-  "description": "Displays title and description meta tag of the current webpage. It is a great tool for QA Engineers from Aleksandr Mironov",
-  "version": "1.0 (MVP)",
+  "description": "MVP version. Displays title and description meta tag of the current webpage. It is a great tool for QA Engineers from Aleksandr Mironov",
+  "version": "1.0",
   "manifest_version": 3,
   "icons": {
     "128": "/icons/icon-128.png"
