@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=100%, initial-scale=1.0" />
+    <title>Meta Tags Viewer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Meta Tags Viewer by Aleksandr Mironov</h1>
+
+    <!-- Таблица для отображения основных данных -->
+    <table>
+      <thead>
+        <tr>
+          <th>Tag</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Title</strong></td>
+          <td id="page-title">Loading...</td>
+        </tr>
+        <tr>
+          <td><strong>Description</strong></td>
+          <td id="meta-description">Loading...</td>
+        </tr>
+        <tr>
+          <td><strong>Tag h1</strong></td>
+          <td id="page-h1">Loading...</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Meta Properties (ending with 'title' or 'description')</h2>
+    <!-- Таблица для отображения всех мета-тегов с атрибутом 'property' или 'name' -->
+    <table id="meta-properties">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Content</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Данные будут добавляться сюда через JavaScript -->
+      </tbody>
+    </table>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
