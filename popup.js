@@ -114,12 +114,24 @@ function handleSmallText() {
         // Update the header with the min font size value
         document.getElementById('min-font-size').textContent = response.minFontSize;
         
-        response.elements.forEach((item) => {
+        response.elements.forEach((item, index) => {
           const row = smallTextTable.insertRow();
           
           // Text cell
           const textCell = row.insertCell(0);
           textCell.textContent = item.text;
+          if (item.isHidden) {
+            textCell.innerHTML += ' <span class="hidden-badge">(hidden)</span>';
+          }
+          // Make text clickable
+          textCell.style.cursor = 'pointer';
+          textCell.title = 'Click to scroll to element';
+          textCell.addEventListener('click', () => {
+            chrome.tabs.sendMessage(tab.id, { 
+              action: 'scrollToElement',
+              elementIndex: index
+            });
+          });
           
           // Font size cell
           const fontSizeCell = row.insertCell(1);
@@ -145,7 +157,113 @@ function handleHighlightAll() {
       
       if (response) {
         console.log('Received highlight response:', response);
-        button.textContent = response.isHighlighted ? 'Remove Highlight' : 'Highlight All';
+        updateHighlightButtonState(response.isHighlighted);
+        // Save state to localStorage
+        localStorage.setItem('highlightState', response.isHighlighted);
+      }
+    });
+  });
+}
+
+// Function to update highlight button state
+function updateHighlightButtonState(isHighlighted) {
+  const button = document.getElementById('highlight-all-button');
+  if (isHighlighted) {
+    button.textContent = 'Remove Highlight';
+    button.classList.add('highlight-active');
+  } else {
+    button.textContent = 'Highlight All';
+    button.classList.remove('highlight-active');
+  }
+}
+
+// Function to handle tab switching
+function initializeTabs() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // Function to switch tabs
+    function switchTab(tabId) {
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+            content.style.display = 'none';
+        });
+
+        // Add active class to selected button and corresponding content
+        const selectedButton = document.querySelector(`[data-tab="${tabId}"]`);
+        const activeContent = document.getElementById(tabId);
+        
+        if (selectedButton && activeContent) {
+            selectedButton.classList.add('active');
+            activeContent.classList.add('active');
+            activeContent.style.display = 'block';
+            
+            // Save selected tab to localStorage
+            localStorage.setItem('selectedTab', tabId);
+        }
+    }
+
+    // Add click handlers to tab buttons
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabId = button.getAttribute('data-tab');
+            switchTab(tabId);
+        });
+    });
+
+    // Restore last selected tab or default to first tab
+    const lastSelectedTab = localStorage.getItem('selectedTab');
+    if (lastSelectedTab) {
+        switchTab(lastSelectedTab);
+    } else {
+        const firstTab = document.querySelector('.tab-button');
+        if (firstTab) {
+            firstTab.click();
+        }
+    }
+}
+
+// Function to handle analytics data
+function handleAnalytics() {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    const tab = tabs[0];
+    
+    chrome.tabs.sendMessage(tab.id, { action: 'findAnalytics' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error finding analytics:', chrome.runtime.lastError);
+        return;
+      }
+      
+      if (response) {
+        // Update Google Analytics
+        const gaId = document.getElementById('ga-id');
+        const gaStatus = document.getElementById('ga-status');
+        gaId.textContent = response.ga.id || 'Not found';
+        gaStatus.textContent = response.ga.status;
+        gaStatus.className = response.ga.status === 'Found' ? 'status-found' : 'status-not-found';
+
+        // Update Google Tag Manager
+        const gtmId = document.getElementById('gtm-id');
+        const gtmStatus = document.getElementById('gtm-status');
+        gtmId.textContent = response.gtm.id || 'Not found';
+        gtmStatus.textContent = response.gtm.status;
+        gtmStatus.className = response.gtm.status === 'Found' ? 'status-found' : 'status-not-found';
+
+        // Update Yandex Metrika
+        const ymId = document.getElementById('ym-id');
+        const ymStatus = document.getElementById('ym-status');
+        ymId.textContent = response.ym.id || 'Not found';
+        ymStatus.textContent = response.ym.status;
+        ymStatus.className = response.ym.status === 'Found' ? 'status-found' : 'status-not-found';
+
+        // Update Facebook Pixel
+        const fbId = document.getElementById('fb-id');
+        const fbStatus = document.getElementById('fb-status');
+        fbId.textContent = response.fb.id || 'Not found';
+        fbStatus.textContent = response.fb.status;
+        fbStatus.className = response.fb.status === 'Found' ? 'status-found' : 'status-not-found';
       }
     });
   });
@@ -153,13 +271,20 @@ function handleHighlightAll() {
 
 // Add event listeners when popup opens
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Popup loaded, initializing...');
-  handleSmallText();
-  const highlightButton = document.getElementById('highlight-all-button');
-  if (highlightButton) {
-    highlightButton.addEventListener('click', handleHighlightAll);
-    console.log('Highlight button event listener added');
-  } else {
-    console.error('Highlight button not found');
-  }
+    console.log('Popup loaded, initializing...');
+    initializeTabs();
+    handleSmallText();
+    handleAnalytics();
+    
+    // Restore highlight button state
+    const savedHighlightState = localStorage.getItem('highlightState') === 'true';
+    updateHighlightButtonState(savedHighlightState);
+    
+    const highlightButton = document.getElementById('highlight-all-button');
+    if (highlightButton) {
+        highlightButton.addEventListener('click', handleHighlightAll);
+        console.log('Highlight button event listener added');
+    } else {
+        console.error('Highlight button not found');
+    }
 });
