@@ -1,7 +1,7 @@
 {
   "name": "Meta Tags Viewer",
-  "description": "MVP version. Displays title and description meta tag of the current webpage. It is a great tool for QA Engineers from Aleksandr Mironov",
-  "version": "1.0",
+  "description": "MVP version. Displays title and description meta tag of the current webpage and manifest_version is a great tool for QA Engineers from Aleksandr Mironov",
+  "version": "1.1",
   "manifest_version": 3,
   "icons": {
     "128": "/icons/icon-128.png"
@@ -9,7 +9,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_end"
     }
   ],
   "action": {
