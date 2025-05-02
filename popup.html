@@ -9,62 +9,113 @@
   <body>
     <h1>Meta Tags Viewer by Aleksandr Mironov</h1>
 
-    <!-- Таблица для отображения основных данных -->
-    <table>
-      <thead>
-        <tr>
-          <th>Tag</th>
-          <th>Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Title</strong></td>
-          <td id="page-title">Loading...</td>
-        </tr>
-        <tr>
-          <td><strong>Description</strong></td>
-          <td id="meta-description">Loading...</td>
-        </tr>
-        <tr>
-          <td><strong>Tag h1</strong></td>
-          <td id="page-h1">Loading...</td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Tabs navigation -->
+    <div class="tabs">
+      <button class="tab-button active" data-tab="meta-tags">Meta Tags</button>
+      <button class="tab-button" data-tab="small-text">Small Text</button>
+      <button class="tab-button" data-tab="analytics">Analytics</button>
+    </div>
 
-    <h2>Meta Properties (ending with 'title' or 'description')</h2>
-    <!-- Таблица для отображения всех мета-тегов с атрибутом 'property' или 'name' -->
-    <table id="meta-properties">
-      <thead>
-        <tr>
-          <th>Property</th>
-          <th>Content</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Данные будут добавляться сюда через JavaScript -->
-      </tbody>
-    </table>
-
-    <h2>
-      Small Text Elements (<span id="min-font-size">12</span>px)
-      <button id="highlight-all-button" class="highlight-button">
-        Highlight All
-      </button>
-    </h2>
-    <div id="small-text-container">
-      <table id="small-text-table">
+    <!-- Meta Tags Tab Content -->
+    <div id="meta-tags" class="tab-content active">
+      <!-- Таблица для отображения основных данных -->
+      <table>
         <thead>
           <tr>
-            <th>Text</th>
-            <th>Font Size</th>
+            <th>Tag</th>
+            <th>Value</th>
           </tr>
         </thead>
         <tbody>
-          <!-- Small text elements will be added here via JavaScript -->
+          <tr>
+            <td><strong>Title</strong></td>
+            <td id="page-title">Loading...</td>
+          </tr>
+          <tr>
+            <td><strong>Description</strong></td>
+            <td id="meta-description">Loading...</td>
+          </tr>
+          <tr>
+            <td><strong>Tag h1</strong></td>
+            <td id="page-h1">Loading...</td>
+          </tr>
         </tbody>
       </table>
+
+      <h2>Meta Properties (ending with 'title' or 'description')</h2>
+      <!-- Таблица для отображения всех мета-тегов с атрибутом 'property' или 'name' -->
+      <table id="meta-properties">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Content</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Данные будут добавляться сюда через JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Small Text Tab Content -->
+    <div id="small-text" class="tab-content">
+      <h2>
+        Small Text Elements (<<span id="min-font-size">12</span>px)
+        <button id="highlight-all-button" class="highlight-button">
+          Highlight All
+        </button>
+      </h2>
+      <div id="small-text-container">
+        <table id="small-text-table">
+          <thead>
+            <tr>
+              <th>Text</th>
+              <th>Font Size</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Small text elements will be added here via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Analytics Tab Content -->
+    <div id="analytics" class="tab-content">
+      <h2>Analytics Tracking IDs</h2>
+      <div id="analytics-container">
+        <table id="analytics-table">
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>ID</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Google Analytics</strong></td>
+              <td id="ga-id">Searching...</td>
+              <td id="ga-status">-</td>
+            </tr>
+            <tr>
+              <td><strong>Google Tag Manager</strong></td>
+              <td id="gtm-id">Searching...</td>
+              <td id="gtm-status">-</td>
+            </tr>
+            <tr>
+              <td><strong>Yandex Metrika</strong></td>
+              <td id="ym-id">Searching...</td>
+              <td id="ym-status">-</td>
+            </tr>
+            <tr>
+              <td><strong>Facebook Pixel</strong></td>
+              <td id="fb-id">Searching...</td>
+              <td id="fb-status">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <script src="popup.js"></script>
